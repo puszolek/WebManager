@@ -5,12 +5,21 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 using WebManager.DataTransferObjects;
+using WebManager.DBContexts;
 
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
+        public UsersContext Context { get; set; }
+
+        public AccountController(UsersContext context)
+        {
+            Context = context;
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -27,7 +36,18 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Login(LoginUserDto user)
         {
             // wybieramy usera z bazy, jesli istnieje to cisniemy
-            var userExists = true;
+            //var context = new UsersContext();
+            var context = Context;
+            // to get all users do: context.Users
+            //var d = context.Users.Find(1);
+            var d = context.Users.ToList();
+            var e = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
+            var userExists = e != null;
+
+            if(user.Email == null || user.Password == null)
+            {
+                userExists = false;
+            }
 
             if (userExists)
             {
@@ -53,7 +73,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                ViewBag.ErrMsg = "UserName or Password is invalid";
+                ViewBag.ErrMsg = "UserName or Password is invalid! Please try again.";
 
                 return View();
             }

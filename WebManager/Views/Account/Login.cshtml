@@ -6,6 +6,7 @@
     <title></title>
 </head>
 <body>
+    <h2>Welcome! Please login to use the WebManager tool! =＾● ⋏ ●＾=</h2>
     @using (Html.BeginForm())
     {
         <table>
@@ -14,11 +15,11 @@
                 <td>@ViewBag.ErrMsg</td>
             </tr>
             <tr>
-                <td>Email</td>
+                <td>Email: </td>
                 <td>@Html.TextBoxFor(m => m.Email)</td>
             </tr>
             <tr>
-                <td>Password</td>
+                <td>Password: </td>
                 <td>@Html.PasswordFor(m => m.Password)</td>
             </tr>
             <tr>
@@ -28,7 +29,7 @@
         </table>
     }
     <p>
-        Don't have account? <a href="/Account/Register">REGISTER N O W FOR F R E E</a>
+        Don't have account? <a href="/Account/Register">REGISTER NOW FOR F R E E</a>
     </p>
 </body>
 </html>
