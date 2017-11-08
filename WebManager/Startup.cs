@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebManager
 {
@@ -23,6 +24,19 @@ namespace WebManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // Adding authentication module to my manager web application
+            services.AddAuthentication(o =>
+            {
+                o.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                o.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(o =>
+            {
+                o.LoginPath = "/Account/Login/";
+                o.AccessDeniedPath = "/Account/Forbidden/";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +57,10 @@ namespace WebManager
 
             app.UseStaticFiles();
 
+            // Run authentication service (module) defined in ConfigureServices
+            app.UseAuthentication();
+
+            // Run MVC service
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
