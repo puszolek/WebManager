@@ -15,30 +15,27 @@ namespace WebManager.Controllers
         };
 
         [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
+        public IEnumerable<TasksDisplay> TasksDisplays()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+
+            return Enumerable.Range(1, 6).Select(index => new TasksDisplay
             {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                DueDate = DateTime.Now.AddDays(index).ToString("d"),
+                Title = Summaries[rng.Next(Summaries.Length)],
+                Details = Summaries[rng.Next(Summaries.Length)],
+                CreationDate = DateTime.Now.ToString("d"),
+                Users = Summaries[rng.Next(Summaries.Length)]
             });
         }
 
-        public class WeatherForecast
+        public class TasksDisplay
         {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
-
-            public int TemperatureF
-            {
-                get
-                {
-                    return 32 + (int)(TemperatureC / 0.5556);
-                }
-            }
+            public string DueDate { get; set; }
+            public string Title { get; set; }
+            public string Details { get; set; }
+            public string CreationDate { get; set; }
+            public string Users { get; set; }
         }
     }
 }

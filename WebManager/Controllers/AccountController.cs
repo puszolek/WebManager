@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using WebManager.DataTransferObjects;
 using WebManager.DBContexts;
+using WebManager.Model;
 
 namespace WebApplication1.Controllers
 {
@@ -35,25 +36,22 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginUserDto user)
         {
-            // wybieramy usera z bazy, jesli istnieje to cisniemy
-            //var context = new UsersContext();
-            var context = Context;
             // to get all users do: context.Users
-            //var d = context.Users.Find(1);
-            var d = context.Users.ToList();
-            var e = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
-            var userExists = e != null;
+            // var d = context.Users.Find(1);
+            // for debugging purposes: show list of users
+            // var d = Context.Users.ToList();
 
-            if(user.Email == null || user.Password == null)
-            {
-                userExists = false;
-            }
+            // fetch user from database
+            var fetchedUser = Context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
+
+            // check whether user exists
+            var userExists = fetchedUser != null;
 
             if (userExists)
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name,"username usera z bazy"),
+                    new Claim(ClaimTypes.Name,"username z bazy"),
                     new Claim(ClaimTypes.Email,user.Email),
                     new Claim(ClaimTypes.Role, "User")
                 };
@@ -84,7 +82,14 @@ namespace WebApplication1.Controllers
         {
             if (user.Password.Equals(user.PasswordConfirmation, StringComparison.Ordinal))
             {
-                //dodajemy usera do bazy jesli takiego nie ma
+                User newUser = new User();
+                newUser.Email = user.Email;
+                newUser.Password = user.Password;
+                newUser.Username = user.UserName;
+
+                // add user to database
+                Context.Users.Add(newUser);
+                Context.SaveChanges();
 
                 return RedirectToAction("Login", "Account");
             }
