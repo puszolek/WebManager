@@ -13,14 +13,6 @@ namespace WebManager.DBContexts
 
         public UsersContext(DbContextOptions<UsersContext> options) : base(options) { }
 
-       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WebManagerDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            }
-        }*/
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -28,6 +20,8 @@ namespace WebManager.DBContexts
                 entity.Property(e => e.Email).IsRequired();
                 entity.Property(e => e.Username).IsRequired();
                 entity.Property(e => e.Password).IsRequired();
+                entity.Property(e => e.Groups).IsRequired();
+                entity.Property(e => e.Id).IsRequired();
             });
         }
     }

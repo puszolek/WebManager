@@ -51,8 +51,8 @@ namespace WebApplication1.Controllers
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name,"username z bazy"),
-                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim(ClaimTypes.Name, fetchedUser.Username),
+                    new Claim(ClaimTypes.Email, fetchedUser.Email),
                     new Claim(ClaimTypes.Role, "User")
                 };
 
