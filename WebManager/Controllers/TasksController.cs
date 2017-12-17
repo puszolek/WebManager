@@ -7,36 +7,41 @@ using WebManager.DBContexts;
 using WebManager.DataTransferObjects;
 using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebManager.Controllers
 {
     [Route("api/[controller]")]
-    public class SampleDataController : Controller
+    public class TasksController : Controller
     {
-        public UsersContext UsersDataContext { get; set; }
+        public DatabaseContext Context { get; set; }
 
-        public TasksContext Context { get; set; }
-
-        public SampleDataController(TasksContext context, UsersContext usersContext)
+        public TasksController(DatabaseContext context)
         {
             Context = context;
-            UsersDataContext = usersContext;
         }
 
         [HttpGet("[action]")]
         public IEnumerable<TasksDisplayDto> TasksDisplays()
         {
             var userEmail = IdentityHelper.GetUserEmail(User);
-            var t = Context.Tasks;
-            var u = UsersDataContext.Users.FirstOrDefault(x => x.Email == userEmail)?.Groups.Split(" ");
+            var data = Context.Users.Include(cc => cc.UsersGroups)
+                                .ThenInclude(bb => bb.Group)
+                                .ThenInclude(aa => aa.Tasks)
+                                .FirstOrDefault(x => x.Email == userEmail);
 
-            return t.Where(task => u.Contains(task.Group)).Select(task => new TasksDisplayDto
+            var tasks = data?.UsersGroups
+                            .Select(u => u.Group)
+                            .SelectMany(g => g.Tasks);
+
+            return tasks.Select(task => new TasksDisplayDto
             {
                 DueDate = task.DueDate,
                 Title = task.Title,
                 Details = task.Details,
                 CreationDate = task.CreationDate,
-                Group = task.Group
+                Group = task.Group.GroupName
             });
         }
     }

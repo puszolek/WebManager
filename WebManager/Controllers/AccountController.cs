@@ -14,9 +14,9 @@ namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
-        public UsersContext Context { get; set; }
+        public DatabaseContext Context { get; set; }
 
-        public AccountController(UsersContext context)
+        public AccountController(DatabaseContext context)
         {
             Context = context;
         }
@@ -82,13 +82,20 @@ namespace WebApplication1.Controllers
         {
             if (user.Password.Equals(user.PasswordConfirmation, StringComparison.Ordinal))
             {
+                if (Context.Users.Any(u => u.Username == user.UserName || u.Email == user.Email))
+                {
+                    ViewBag.ErrMsg = "User already exists!";
+                    return View();
+                }
                 User newUser = new User();
                 newUser.Email = user.Email;
                 newUser.Password = user.Password;
                 newUser.Username = user.UserName;
 
-                // add user to database
-                Context.Users.Add(newUser);
+                Group newGroup = new Group();
+                newGroup.GroupName = user.UserName;
+
+                Context.Add(new UserGroup { User = newUser, Group = newGroup });
                 Context.SaveChanges();
 
                 return RedirectToAction("Login", "Account");
@@ -99,13 +106,6 @@ namespace WebApplication1.Controllers
 
                 return View();
             }
-        }
-
-        public async Task<IActionResult> Logout()
-        {
-            await AuthenticationHttpContextExtensions.SignOutAsync(HttpContext, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            return RedirectToAction("Index", "Home");
         }
     }
 }

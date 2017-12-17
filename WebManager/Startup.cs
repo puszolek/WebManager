@@ -41,8 +41,7 @@ namespace WebManager
             });
 
             var connection = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = WebManagerDB; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = True; ApplicationIntent = ReadWrite; MultiSubnetFailover = False; MultipleActiveResultSets=true";
-            services.AddDbContext<UsersContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<TasksContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

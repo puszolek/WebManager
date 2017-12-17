@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace WebManager.Model
 {
-    public class User
+    public class Group
     {
         [Key]
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public string GroupName { get; set; }
+        public virtual ICollection<Task> Tasks { get; } = new List<Task>();
         public virtual ICollection<UserGroup> UsersGroups { get; } = new List<UserGroup>();
     }
 }
