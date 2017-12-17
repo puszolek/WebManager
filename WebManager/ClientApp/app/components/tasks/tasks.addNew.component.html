@@ -1,0 +1,35 @@
+﻿<h1>New Task</h1>
+
+<form #f="ngForm" class="form-horizontal" novalidate>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Title: </label>
+        <div class="col-sm-8">
+            <input name="title" type="text" [(ngModel)]="task.Title" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Details: </label>
+        <div class="col-sm-8">
+            <input name="details" type="text"[(ngModel)]="task.Details" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Due Date: </label>
+        <div class="col-sm-8">
+            <input name="dueDate" type="date" [(ngModel)]="task.DueDate" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Group: </label>
+        <div class="col-sm-8">
+            <select name="group" [(ngModel)]="task.GroupId" class="form-control">
+                <option *ngFor="let group of groups" [value]="group.id">
+                    {{group.name}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" (click)="submit()" class="btn btn-default">Submit</button>
+    </div>
+</form>

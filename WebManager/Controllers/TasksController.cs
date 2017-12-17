@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebManager.DBContexts;
 using WebManager.DataTransferObjects;
 using System.Security.Claims;
 using System.Security.Principal;
 using Microsoft.EntityFrameworkCore;
-
+using WebManager.Model;
 
 namespace WebManager.Controllers
 {
@@ -43,6 +42,32 @@ namespace WebManager.Controllers
                 CreationDate = task.CreationDate,
                 Group = task.Group.GroupName
             });
+        }
+
+        [HttpPost("[action]")]
+        public bool AddTask([FromBody] NewTaskDto taskDto)
+        {
+            try
+            {
+                var group = Context.Groups.Where(g => g.Id == taskDto.GroupId).FirstOrDefault();
+                var newTask = new Task
+                {
+                    Title = taskDto.Title,
+                    Details = taskDto.Details,
+                    DueDate = taskDto.DueDate,
+                    CreationDate = DateTime.Now,
+                    Group = group
+                };
+
+                Context.Add(newTask);
+                Context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
