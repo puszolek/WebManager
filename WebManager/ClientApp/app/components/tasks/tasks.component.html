@@ -7,19 +7,23 @@
 <table class='table' *ngIf="tasks">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Due date</th>
             <th>Title</th>
             <th>Details</th>
             <th>Creation date</th>
+            <th></th>
             <!--<th>Users</th>-->
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let task of tasks">
+            <td>{{ task.id }}</td>
             <td>{{ task.dueDate }}</td>
             <td>{{ task.title }}</td>
             <td>{{ task.details }}</td>
             <td>{{ task.creationDate }}</td>
+            <td><button type="submit" (click)="delete(task)" class="btn btn-default">Delete</button></td>
             <!--<td>{{ task.users }}</td>-->
         </tr>
     </tbody>

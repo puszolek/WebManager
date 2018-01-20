@@ -36,6 +36,7 @@ namespace WebManager.Controllers
 
             return tasks.Select(task => new TasksDisplayDto
             {
+                Id = task.Id,
                 DueDate = task.DueDate,
                 Title = task.Title,
                 Details = task.Details,
@@ -45,7 +46,7 @@ namespace WebManager.Controllers
         }
 
         [HttpPost("[action]")]
-        public bool AddTask([FromBody] NewTaskDto taskDto)
+        public bool AddTask([FromBody]  NewTaskDto taskDto)
         {
             try
             {
@@ -61,6 +62,33 @@ namespace WebManager.Controllers
 
                 Context.Add(newTask);
                 Context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost("[action]")]
+        public bool DeleteTask([FromBody] TasksDisplayDto taskDto)
+        {
+            try
+            {
+                Console.WriteLine("delete");
+                /*var group = Context.Groups.Where(g => g.Id == taskDto.GroupId).FirstOrDefault();
+                var newTask = new Task
+                {
+                    Title = taskDto.Title,
+                    Details = taskDto.Details,
+                    DueDate = taskDto.DueDate,
+                    CreationDate = DateTime.Now,
+                    Group = group
+                };
+
+                Context.Add(newTask);
+                Context.SaveChanges();*/
 
                 return true;
             }

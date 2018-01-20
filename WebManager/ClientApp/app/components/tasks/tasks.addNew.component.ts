@@ -2,7 +2,6 @@
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 
-
 @Component({
     selector: 'tasks',
     templateUrl: './tasks.addNew.component.html'
