@@ -76,19 +76,9 @@ namespace WebManager.Controllers
         {
             try
             {
-                Console.WriteLine("delete");
-                /*var group = Context.Groups.Where(g => g.Id == taskDto.GroupId).FirstOrDefault();
-                var newTask = new Task
-                {
-                    Title = taskDto.Title,
-                    Details = taskDto.Details,
-                    DueDate = taskDto.DueDate,
-                    CreationDate = DateTime.Now,
-                    Group = group
-                };
-
-                Context.Add(newTask);
-                Context.SaveChanges();*/
+                var taskToDelete = Context.Tasks.Where(g => g.Id == taskDto.Id).FirstOrDefault();
+                Context.Entry(taskToDelete).State = EntityState.Deleted;
+                Context.SaveChanges();
 
                 return true;
             }

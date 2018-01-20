@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'tasks',
@@ -8,7 +9,7 @@ import { Http, RequestOptions } from '@angular/http';
 export class TasksComponent {
     public tasks: TasksDisplay[];
 
-    constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) {
+    constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string, private router: Router) {
         http.get(baseUrl + 'api/Tasks/TasksDisplays').subscribe(result => {
             this.tasks = result.json() as TasksDisplay[];
         }, error => console.error(error));
@@ -17,7 +18,7 @@ export class TasksComponent {
     public delete(task: TasksDisplay) {
         this.http.post(this.baseUrl + 'api/Tasks/DeleteTask', task).subscribe(result => {
             if (result) {
-                //this.router.navigate(['/tasks']);
+                window.location.reload(true); 
             }
         }, error => {
             console.error(error);
